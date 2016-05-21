@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev-server": "nodemon backend/index.js --exec babel-node --watch backend",
-    "webpack-dev-server": "babel-node webpack/webpack-dev-server.js",
+    "webpack-dev-server": "NODE_ENV=development nodemon webpack/webpack-dev-server.js --exec babel-node --watch webpack",
     "develop": "concurrently --kill-others \"npm run webpack-dev-server\" \"npm run dev-server\""
   },
   "author": "Domas <domasx2@gmail.com>",
@@ -17,15 +17,19 @@
     "babel-core": "^6.9.0",
     "babel-loader": "^6.2.4",
     "babel-preset-es2015": "^6.9.0",
+    "babel-preset-react": "^6.5.0",
+    "babel-preset-react-hmre": "^1.1.1",
     "babel-preset-stage-0": "^6.5.0",
     "concurrently": "^2.1.0",
     "css-loader": "^0.23.1",
     "eslint": "^2.10.2",
     "eslint-loader": "^1.3.0",
+    "eslint-plugin-react": "^5.1.1",
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.8.5",
     "nodemon": "^1.9.2",
     "postcss-loader": "^0.9.1",
+    "style-loader": "^0.13.1",
     "stylus": "^0.54.5",
     "stylus-loader": "^2.1.0",
     "webpack": "^1.13.1",
@@ -33,6 +37,9 @@
   },
   "dependencies": {
     "express": "^4.13.4",
-    "pug": "^2.0.0-alpha7"
+    "matter-js": "^0.10.0",
+    "pug": "^2.0.0-alpha7",
+    "react": "^15.1.0",
+    "react-dom": "^15.1.0"
   }
 }

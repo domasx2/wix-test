@@ -10,7 +10,7 @@ new WebpackDevServer(webpack(config), {
     stats: true,
     historyApiFallback: true,
     headers: {
-        'Access-Control-Allow-Origin': 'http://localhost:3001',
+        'Access-Control-Allow-Origin': 'http://localhost:3000',
         'Access-Control-Allow-Headers': 'X-Requested-With'
     }
 }).listen(3001, '0.0.0.0', function (err) {
