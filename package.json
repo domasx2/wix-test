@@ -37,8 +37,10 @@
   },
   "dependencies": {
     "express": "^4.13.4",
+    "keycode": "^2.1.1",
     "matter-js": "^0.10.0",
     "pug": "^2.0.0-alpha7",
+    "raf": "^3.2.0",
     "react": "^15.1.0",
     "react-dom": "^15.1.0"
   }
