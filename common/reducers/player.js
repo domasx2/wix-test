@@ -1,6 +1,6 @@
 import {Body} from 'matter-js';
 
-import events from '../events';
+import types from '../actions/types';
 
 export default function(world, action) {
 
@@ -11,13 +11,19 @@ export default function(world, action) {
 
             //set move direction
             switch (action.type) {
-                case events.PLAYER_MOVE:
-                    player.game.move_direction = action.payload;
+                case types.PLAYER_MOVE:
+                    player.game.move_direction = action.move_vec;
+                    return world;
             }
+        }
+    }
 
+    if (action.type === types.BEFORE_TICK) {
+        console.log('hoo');
+        world.bodies.filter(body => body.is_player).forEach(player => {
             Body.setVelocity(player, {x:0, y:0});
             Body.applyForce(player, player.position, player.game.move_direction);
-        }
+        });
     }
 
     return world;

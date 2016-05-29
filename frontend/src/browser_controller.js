@@ -27,6 +27,7 @@ export default class BrowserController extends PlayerController {
         this.onKeyUp_bound = this.onKeyUp.bind(this);
         this.init();
 
+
         this.actions_down = {};
     }
 
@@ -42,8 +43,6 @@ export default class BrowserController extends PlayerController {
 
     onKeyDown(e) {
         const action = BINDINGS[keycode(e)];
-
-        console.log('keydown', keycode(e), action);
 
         if (action) {
             this.actions_down[action] = true;

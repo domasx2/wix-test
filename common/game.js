@@ -1,11 +1,15 @@
 import {Engine, Events, World, Bodies, Body, Runner} from 'matter-js';
+import CircularJSON from 'circular-json';
+import EventEmitter from 'events';
 import rootReducer from './reducers';
-
+import types from './actions/types';
 import {PLAYER_RADIUS, PLAYER_WEIGHT} from './const';
 
-export default class Game {
+export default class Game extends EventEmitter {
     constructor() {
-        const world = this.world = World.create({
+        super();
+
+        const world = World.create({
             gravity: {
                 x: 0,
                 y: 0,
@@ -17,54 +21,66 @@ export default class Game {
             world
         });
 
-        Events.on(this.engine, 'beforeUpdate', () => this.beforeUpdate());
-
         this.controllers = [];
 
         this.runner = null;
+
+        this.beforeTick_bound = this.beforeTick.bind(this);
+        this.afterTick_bound = this.afterTick.bind(this);
+
+        this.frames = [];
+
+        this.controllers = [];
+
+        this.action_queue = [];
     }
 
-    addRect(x, y, width, height) {
-        const rect = Bodies.rectangle(x, y, width, height);
-        World.add(this.engine.world, [rect]);
-    }
-
-    addPlayer(id, x, y) {
-        const player = Bodies.circle(x, y, PLAYER_RADIUS, {
-            id,
-            game: {
-                move_direction: {x: 0, y:0}
-            }
-        });
-
-        Body.setMass(player, PLAYER_WEIGHT);
-
-        console.log('mass', player.mass);
-
-        World.add(this.engine.world, [player]);
+    dispatch(action) {
+        this.action_queue.push(action);
     }
 
     addController(controller) {
         this.controllers.push(controller);
     }
 
-    beforeUpdate() {
-        //gather actions
-        const actions = [].concat.apply([], this.controllers.map(ctrl => ctrl.drainActions()));
+    beforeTick() {
+
+        this.emit('beforeTick');
+
+        this.controllers.forEach(controller => {
+            controller.drainActions().forEach(action => {
+                this.dispatch(action);
+            });
+        });
+
+        const frame = {
+            t: new Date().getTime(),
+            actions: this.action_queue
+        };
+
+        this.action_queue = [];
 
         //reduce world using these actions
-        actions.forEach(rootReducer.bind(null, this.world));
+        frame.actions.forEach(rootReducer.bind(null, this.engine.world));
+        rootReducer(this.engine.world, {type: types.BEFORE_TICK});
+    }
 
+    afterTick() {
+
+        this.emit('afterTick');
     }
 
     run() {
-        
         this.runner = Engine.run(this.engine);
+        Events.on(this.runner, 'beforeTick', this.beforeTick_bound);
+        Events.on(this.runner, 'afterTick', this.afterTick_bound);
     }
 
     stop() {
         if (this.runner) {
             Runner.stop(this.runner);
+            Events.off(this.runner, 'beforeTick', this.beforeTick_bound);
+            Events.off(this.runner, 'afterTick', this.afterTick_bound);
         }
     }
 }
