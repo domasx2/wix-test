@@ -1,6 +1,4 @@
-# a basic express + webpack boilerplate
-
-Work in progress
+# wix test 
 
 
 ## get started
@@ -11,3 +9,9 @@ npm run develop
 ```
 
 open http://localhost:3000
+
+## test
+```sh
+npm test
+```
+
