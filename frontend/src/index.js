@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import HostGame from './components/host-game';
+import ParserContainer from './components/parser-container';
 
 import './style/index.styl';
 
-ReactDOM.render(<HostGame />, document.getElementById('mount'));
+ReactDOM.render(<ParserContainer />, document.getElementById('mount'));

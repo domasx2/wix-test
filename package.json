@@ -4,7 +4,7 @@
   "description": "boilerplate for webpack + express app",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "babel-node ./node_modules/.bin/jasmine",
     "dev-server": "nodemon backend/index.js --exec babel-node --watch backend",
     "webpack-dev-server": "NODE_ENV=development nodemon webpack/webpack-dev-server.js --exec babel-node --watch webpack",
     "develop": "concurrently --kill-others \"npm run webpack-dev-server\" \"npm run dev-server\""
